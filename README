@@ -1,0 +1,3 @@
+This is a Python project GUI for interface Arduino with serial port.
+
+2012-04-04 (v0.2) Arduino fetch from feed xml or manual insert of color in hex format
