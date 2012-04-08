@@ -19,10 +19,22 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ##
 
-from Tkinter import *
-from twittPy import *
+import twittPy
 import serialComunication
 import ConfigParser
+import os
+
+import sys
+if sys.version_info < (3, 0):
+    try:
+        from Tkinter import *
+    except ImportError:
+        raise ImportError("Tkinter module not found - it is required for GUI")
+else:
+    try:
+        from tkinter import *
+    except ImportError:
+        raise ImportError("tkinter module not found - it is required for GUI")
 
 class App:
 
@@ -34,12 +46,13 @@ class App:
         
         # GUI
         master = Tk()
-        master.geometry("500x400")
-        master.title("Arduino SC Interface (v0.2)")
+        master.geometry("500x600")
+        master.title("Arduino SC Interface (v0.3)")
 
         frame = Frame(master)
         frame.pack()
 
+        #Label
         self.portLabel = LabelFrame(master, text="Port", padx=5, pady=5)
         self.portLabel.pack(padx=10, pady=10)
  
@@ -52,6 +65,7 @@ class App:
         self.urlLabel = LabelFrame(master, text="Feed URL/Filename", padx=5, pady=5)
         self.urlLabel.pack(padx=10, pady=10)
 
+        #Entry text
         self.portEntry = Entry(self.portLabel)
         self.portEntry.insert(0, config.get('Arduino','port'))
         self.portEntry.pack()
@@ -68,6 +82,7 @@ class App:
         self.urlEntry.insert(0, config.get('Arduino','url'))
         self.urlEntry.pack()
 
+        #Buttons
         self.sendButton = Button(frame, text="SendToArduino", state="disable",command=self.send_func)
         self.sendButton.pack(side=LEFT)
 
@@ -80,11 +95,11 @@ class App:
         self.quitButton = Button(frame, text="Quit", bg="red", command=self.close_func)
         self.quitButton.pack(side=LEFT)
 
+        #Text area
         self.text = Text(master)
-        self.text.insert("insert", "Arduino SC interface (v0.2)\n--")
-        #self.text.configure(state="disabled")
+        self.text.insert("insert", "Arduino SC interface (v0.3)\n--")
         self.text.pack()
-
+        
         master.mainloop()
 
     #validate entry color (make active the SendToArduino button)
@@ -95,26 +110,29 @@ class App:
 
     #send to Arduino function
     def send_func(self):
-        serialResponse = serialComunication.send_serial(self.colorEntry.get(), self.portEntry.get(), self.rateEntry.get())
+        serialResponse = serialComunication.send_serial(self.colorEntry.get()[1:], self.portEntry.get(), self.rateEntry.get())
         self.text.insert("end", "\n%s --> %s"%(self.colorEntry.get(),serialResponse))
 
     #implement feed class for twitter
     def feed_func(self):
         try:
-            feed = TwittFeed(self.urlEntry.get())
+            feed = twittPy.TwittFeed(self.urlEntry.get())
             self.colorEntry.insert(0,feed.colorArduino(feed.readFeed('text')))
         except Exception:
             import sys
             self.text.insert("end", "\n%s"%(sys.exc_info()[2]))
-                                                 
+
+    #clear and close button
     def clear_func(self):
         self.colorEntry.delete(0,END)
+        serialResponse = serialComunication.send_serial('000000', self.portEntry.get(), self.rateEntry.get())
         self.sendButton.configure(state="disable")
 
     def close_func(self):
         self.write_to_config()
         sys.exit(0)
 
+    #write in properties file
     def write_to_config(self):
         config = ConfigParser.RawConfigParser()
         config.add_section('Arduino')
@@ -123,4 +141,3 @@ class App:
         config.set('Arduino', 'url', self.urlEntry.get())
         with open('properties.cfg', 'wb') as configfile:
             config.write(configfile)
-
