@@ -1,3 +1,7 @@
 This is a Python project GUI for interface Arduino with serial port.
 
-2012-04-04 (v0.2) Arduino fetch from feed xml or manual insert of color in hex format
+2012-04-04 (v0.2) Arduino fetch from feed xml or manual insert of color in hex format.
+
+2012-04-08 (v0.3) GUI fetch its properties from properties.cfg. Add color.ino Arduino sketch.
+
+2012-04-09 (v0.3.1) Some bug fixing.

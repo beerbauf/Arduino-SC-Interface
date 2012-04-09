@@ -38,6 +38,8 @@ else:
 
 class App:
 
+    _title = "Arduino SC Interface (v0.3.1)"
+
     def __init__(self):
 
         # Config file
@@ -47,7 +49,7 @@ class App:
         # GUI
         master = Tk()
         master.geometry("500x600")
-        master.title("Arduino SC Interface (v0.3)")
+        master.title(_title)
 
         frame = Frame(master)
         frame.pack()
@@ -97,7 +99,7 @@ class App:
 
         #Text area
         self.text = Text(master)
-        self.text.insert("insert", "Arduino SC interface (v0.3)\n--")
+        self.text.insert("insert", "%s\n--"%_title)
         self.text.pack()
         
         master.mainloop()
@@ -110,7 +112,7 @@ class App:
 
     #send to Arduino function
     def send_func(self):
-        serialResponse = serialComunication.send_serial(self.colorEntry.get()[1:], self.portEntry.get(), self.rateEntry.get())
+        serialResponse = serialComunication.send_serial(self.colorEntry.get(), self.portEntry.get(), self.rateEntry.get())
         self.text.insert("end", "\n%s --> %s"%(self.colorEntry.get(),serialResponse))
 
     #implement feed class for twitter
@@ -125,7 +127,7 @@ class App:
     #clear and close button
     def clear_func(self):
         self.colorEntry.delete(0,END)
-        serialResponse = serialComunication.send_serial('000000', self.portEntry.get(), self.rateEntry.get())
+        serialResponse = serialComunication.send_serial('#000000', self.portEntry.get(), self.rateEntry.get())
         self.sendButton.configure(state="disable")
 
     def close_func(self):
