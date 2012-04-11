@@ -38,9 +38,9 @@ else:
 
 class App:
 
-    _title = "Arduino SC Interface (v0.3.1)"
-
     def __init__(self):
+
+        _title = "Arduino SC Interface (v0.3.1)"
 
         # Config file
         config = ConfigParser.ConfigParser()

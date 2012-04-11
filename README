@@ -4,4 +4,4 @@ This is a Python project GUI for interface Arduino with serial port.
 
 2012-04-08 (v0.3) GUI fetch its properties from properties.cfg. Add color.ino Arduino sketch.
 
-2012-04-09 (v0.3.1) Some bug fixing.
+2012-04-09 (v0.3.1) Some bugs fixed.

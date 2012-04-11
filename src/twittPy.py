@@ -20,7 +20,7 @@
 ##
 
 import os
-import urllib2, unicodedata
+import urllib, unicodedata
 from xml.dom.minidom import parseString
 
 
@@ -29,12 +29,12 @@ class TwittFeed:
         if os.path.isfile(fileName):
             try:
                 file = open(fileName,'r')
-            except Exception, e:
-                raise Exception(e.printStack())
+            except Exception:
+                raise Exception
                                 
         else:
             try:
-                file = urllib2.urlopen(fileName)
+                file = urllib.urlopen(fileName)
             except:
                 raise Exception
 
